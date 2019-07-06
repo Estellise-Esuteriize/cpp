@@ -1,32 +1,74 @@
 #include <iostream>
+#include <type_traits>
 
+using namespace std;
 
 struct SingleNode;
+struct DoubleNode;
+struct BaseNode;
 
-void push(SingleNode**, int);
+void push(void**, int);
+
 void InsertAfter(SingleNode*, SingleNode*, int);
 void InsertBefore(SingleNode*, SingleNode*, int);
 void display(SingleNode*);
 
-void whileTest();
-void test(int*);
 
-struct SingleNode {
+ struct BaseNode {
 
-	int data;
+	 typedef int intData;
+
+	 intData data;
+	
+};
+
+struct SingleNode : BaseNode {
 
 	SingleNode* next;
 
 };
 
+struct DoubleNode : BaseNode {
+
+	DoubleNode* back;
+
+	DoubleNode* next;
+
+};
 
 
-int i = 0;
+template <typename... Ts> using void_t = void;
+
+template <typename T, typename = void>
+struct has_typedef_foobar : false_type {};
+
+//template <typename T>
+//struct has_typedef_foobar<T, void_t<typename T::intData>> : std::true_type {};
+
+template <typename T>
+struct has_typedef_foobar<T, decltype(declval<T>().data, void())> : true_type {};
+
+struct foo {
+	float foobar;
+};
+
+
 int main()
 {
+
 	SingleNode* node = nullptr;
 
-	push(&node, 1);
+	std::cout << has_typedef_foobar<int>::value << std::endl;
+	std::cout << has_typedef_foobar<BaseNode>::value << std::endl;
+
+	/**
+	| Start Single Linked List
+	*//* * /
+	SingleNode* node = nullptr;
+
+	int* pInt = new int(324);
+
+	push((void**)&node, 1);
 
 	push(&node, 2);
 
@@ -47,6 +89,23 @@ int main()
 	display(node);
 
 	getchar();
+
+	/**
+	| End Single Linked List
+	*//* * /
+
+	DoubleNode* dNode = nullptr;
+
+	push(&dNode, 2);
+
+	push(&dNode, 5);
+	push(&dNode, 7);
+
+	display(dNode);
+
+	/**
+	| Double Linked List
+	*/
 }
 
 void InsertBefore(SingleNode* head, SingleNode* before, int data)
@@ -58,7 +117,7 @@ void InsertBefore(SingleNode* head, SingleNode* before, int data)
 
 	if (head == nullptr || head == before)
 	{
-		push(&head, data);
+		//push(&head, data);
 	}
 	else
 	{
@@ -96,7 +155,7 @@ void InsertAfter(SingleNode* head, SingleNode* after, int data)
 
 	if (head == nullptr)
 	{
-		push(&head, data);
+		//push(&head, data);
 	}
 	else 
 	{
@@ -139,32 +198,68 @@ void InsertAfter(SingleNode* head, SingleNode* after, int data)
 }
 
 
-
-void push(SingleNode** head, int data)
+void push(void** head, int data)
 {
 
-	SingleNode* newNode = new SingleNode();
-	
+	/*SingleNode* newNode = new SingleNode();
+
 	newNode->data = data;
 
 	newNode->next = *head;
 
 	if (*head == nullptr) {
-		
+
 		newNode->next = nullptr;
 
 		//std::cout << "Head Node " << (*head)->data << std::endl;
 	}
 
 	*head = newNode;
+	*/
 
 }
+/*/
+void push(DoubleNode** head, int data)
+{
 
+	DoubleNode* node = new DoubleNode();
+
+	node->data = data;
+
+	node->next = *head;
+
+	(*head)->back = node;
+
+	if ((*head)->next == nullptr)
+	{
+		node->next = nullptr;
+		(*head)->back = nullptr;
+	}
+
+	*head = node;
+
+}
+*/
 
 void display(SingleNode* node) 
 {
 
 	SingleNode* current = node;
+
+	while (current != nullptr)
+	{
+		std::cout << "Data of Node : " << current->data << std::endl;
+
+		current = current->next;
+	}
+
+
+}
+
+void display(DoubleNode* node)
+{
+
+	DoubleNode* current = node;
 
 	while (current != nullptr)
 	{
