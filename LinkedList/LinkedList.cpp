@@ -1,40 +1,27 @@
 #include <iostream>
 #include <type_traits>
+#include "Node.h"
 
 using namespace std;
 
-struct SingleNode;
-struct DoubleNode;
-struct BaseNode;
+//struct SingleNode;
+//struct DoubleNode;
+//struct BaseNode;
 
-void push(void**, int);
+//void push(void**, int);
 
-void InsertAfter(SingleNode*, SingleNode*, int);
-void InsertBefore(SingleNode*, SingleNode*, int);
-void display(SingleNode*);
+//void InsertAfter(SingleNode*, SingleNode*, int);
+//void InsertBefore(SingleNode*, SingleNode*, int);
+//void display(SingleNode*);
 
 
- struct BaseNode {
+ struct node_l {
 
-	 typedef int intData;
-
-	 intData data;
-	
+	 int data;
+		
+	 node_l* next;
 };
 
-struct SingleNode : BaseNode {
-
-	SingleNode* next;
-
-};
-
-struct DoubleNode : BaseNode {
-
-	DoubleNode* back;
-
-	DoubleNode* next;
-
-};
 
 
 template <typename... Ts> using void_t = void;
@@ -55,11 +42,18 @@ struct foo {
 
 int main()
 {
+	node_l* head = nullptr;
 
-	SingleNode* node = nullptr;
 
-	std::cout << has_typedef_foobar<int>::value << std::endl;
-	std::cout << has_typedef_foobar<BaseNode>::value << std::endl;
+	Node node;
+
+	node.push<node_l, int>(&head, 1);
+
+
+	//SingleNode* node = nullptr;
+
+	//std::cout << has_typedef_foobar<int>::value << std::endl;
+	//std::cout << has_typedef_foobar<BaseNode>::value << std::endl;
 
 	/**
 	| Start Single Linked List
@@ -81,11 +75,11 @@ int main()
 	InsertBefore(node, node->next, 6);
 
 	InsertAfter(node, node->next, 13);
-	
+
 	push(&node, 4);
 
 	InsertAfter(node, node->next, 15);
-	
+
 	display(node);
 
 	getchar();
@@ -106,8 +100,11 @@ int main()
 	/**
 	| Double Linked List
 	*/
+
+	return 0;
 }
 
+/** /
 void InsertBefore(SingleNode* head, SingleNode* before, int data)
 {
 
@@ -215,10 +212,10 @@ void push(void** head, int data)
 	}
 
 	*head = newNode;
-	*/
+	/** /
 
 }
-/*/
+/* /
 void push(DoubleNode** head, int data)
 {
 
@@ -239,7 +236,7 @@ void push(DoubleNode** head, int data)
 	*head = node;
 
 }
-*/
+* /
 
 void display(SingleNode* node) 
 {
@@ -270,3 +267,4 @@ void display(DoubleNode* node)
 
 
 }
+/**/
